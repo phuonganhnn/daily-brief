@@ -35,6 +35,23 @@ def url_hash(url: str) -> str:
     return hashlib.sha1(url.encode("utf-8")).hexdigest()[:12]
 
 
+# Stop-words to ignore when normalizing titles for dedup clustering
+_STOP = {
+    "a","an","the","of","in","on","for","to","and","or","with","by","as","at",
+    "from","is","are","was","were","be","been","being","this","that","these",
+    "those","it","its","into","over","up","new","says","said","reports","report",
+}
+
+
+def normalize_title(t: str) -> str:
+    """Lowercase, strip punctuation, drop stopwords, return first 8 content words.
+    Used to cluster headlines about the same story across publishers."""
+    import re
+    cleaned = re.sub(r"[^a-zA-Z0-9\s]", " ", t.lower())
+    words = [w for w in cleaned.split() if w not in _STOP and len(w) > 2]
+    return " ".join(words[:8])
+
+
 def google_news_rss(query: str) -> str:
     q = urllib.parse.quote_plus(query)
     return f"https://news.google.com/rss/search?q={q}&hl=en&gl=VN&ceid=VN:en"
@@ -128,15 +145,28 @@ def main() -> None:
         print(f"  - {name}: {len(items)} fresh items")
         all_items.extend(items)
 
-    # Dedupe by id (url hash) — keep highest-weight version
+    # Stage 1: dedupe by id (url hash) — keep highest-weight version
     by_id: dict[str, dict] = {}
     for item in all_items:
         existing = by_id.get(item["id"])
         if existing is None or item["weight"] > existing["weight"]:
             by_id[item["id"]] = item
+    url_deduped = list(by_id.values())
 
-    deduped = list(by_id.values())
-    print(f"[ingest] {len(all_items)} total → {len(deduped)} after dedupe")
+    # Stage 2: cluster by normalized title to catch the same story
+    # republished by different outlets with different URLs.
+    by_title: dict[str, dict] = {}
+    for item in url_deduped:
+        key = normalize_title(item["title"])
+        if not key:
+            by_title[item["id"]] = item  # fall back to id if title normalizes to empty
+            continue
+        existing = by_title.get(key)
+        if existing is None or item["weight"] > existing["weight"]:
+            by_title[key] = item
+
+    deduped = list(by_title.values())
+    print(f"[ingest] {len(all_items)} total → {len(url_deduped)} after URL dedup → {len(deduped)} after title clustering")
 
     out_path = RAW_DIR / "items.json"
     out_path.write_text(json.dumps(deduped, ensure_ascii=False, indent=2), encoding="utf-8")
