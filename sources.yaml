@@ -191,6 +191,84 @@ rss_feeds:
     sector: "consumer"
 
 ## --------------------------------------------------------------------------
+## SUBSTACK NEWSLETTERS — long-form analysis from independent voices
+## Each Substack publication exposes /feed at its subdomain
+## --------------------------------------------------------------------------
+
+  - name: "Net Interest (Marc Rubinstein)"
+    url: "https://www.netinterest.co/feed"
+    region: "Global"
+    weight: 1.0
+    section_hint: "sector"
+    sector: "financial_services"
+
+  - name: "Doomberg"
+    url: "https://newsletter.doomberg.com/feed"
+    region: "Global"
+    weight: 0.8
+    section_hint: "sector"
+    sector: "energy_commodities"
+
+  - name: "The Generalist (Mario Gabriele)"
+    url: "https://www.generalist.com/feed"
+    region: "Global"
+    weight: 0.8
+    section_hint: "investor"
+
+  - name: "Kyla's Newsletter (Kyla Scanlon)"
+    url: "https://kyla.substack.com/feed"
+    region: "Global"
+    weight: 0.7
+    section_hint: "macro"
+
+  - name: "Vietnam Weekly (Michael Tatarski)"
+    url: "https://vietnamweekly.substack.com/feed"
+    region: "VN"
+    weight: 1.0
+    section_hint: "regulatory"
+
+  - name: "Bamboo Works (China-Asia equities)"
+    url: "https://www.bambooworks.com/feed/"
+    region: "China/Asia"
+    weight: 0.7
+    section_hint: "sector"
+
+## --------------------------------------------------------------------------
+## REDDIT — niche sub discussions, surfaces practitioner color
+## Reddit exposes RSS at /r/<sub>/.rss
+## --------------------------------------------------------------------------
+
+  - name: "r/SecurityAnalysis"
+    url: "https://www.reddit.com/r/SecurityAnalysis/.rss"
+    region: "Global"
+    weight: 0.7
+    section_hint: "sector"
+
+  - name: "r/PrivateEquity"
+    url: "https://www.reddit.com/r/PrivateEquity/.rss"
+    region: "Global"
+    weight: 0.7
+    section_hint: "investor"
+
+  - name: "r/investing top"
+    url: "https://www.reddit.com/r/investing/top/.rss?t=day"
+    region: "Global"
+    weight: 0.5
+    section_hint: "macro"
+
+  - name: "r/IndianStreetBets (regional)"
+    url: "https://www.reddit.com/r/IndianStreetBets/.rss"
+    region: "India"
+    weight: 0.4
+    section_hint: "sector"
+
+  - name: "r/VietNam business"
+    url: "https://www.reddit.com/r/VietNam/.rss"
+    region: "VN"
+    weight: 0.4
+    section_hint: "macro"
+
+## --------------------------------------------------------------------------
 ## GOOGLE NEWS QUERIES — used as supplemental ingest for fresh signal
 ## Each query becomes its own RSS feed via news.google.com/rss/search
 ## --------------------------------------------------------------------------
