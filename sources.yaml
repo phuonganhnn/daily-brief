@@ -1,0 +1,258 @@
+## Koru Brief — Sources
+## RSS feeds + Google News queries.
+## The ingest layer fetches all of these on every run, dedupes by URL hash,
+## and hands the raw items to the scorer. Dead feeds are silently skipped.
+##
+## Edit freely. Add a new feed and it gets pulled on the next run.
+
+## --------------------------------------------------------------------------
+## ENGLISH — Regional & global business / deal coverage
+## --------------------------------------------------------------------------
+rss_feeds:
+
+  - name: "DealStreetAsia"
+    url: "https://www.dealstreetasia.com/feed"
+    region: "SEA"
+    weight: 1.0
+    section_hint: "ma"
+
+  - name: "Tech in Asia"
+    url: "https://www.techinasia.com/rss"
+    region: "SEA"
+    weight: 0.8
+    section_hint: "investor"
+
+  - name: "Nikkei Asia"
+    url: "https://asia.nikkei.com/rss/feed/nar"
+    region: "Asia"
+    weight: 0.9
+    section_hint: "sector"
+
+  - name: "KrAsia"
+    url: "https://kr-asia.com/feed"
+    region: "SEA/China"
+    weight: 0.7
+    section_hint: "sector"
+
+  - name: "e27"
+    url: "https://e27.co/feed"
+    region: "SEA"
+    weight: 0.6
+    section_hint: "investor"
+
+  - name: "Reuters Business"
+    url: "https://www.reuters.com/business/feed/"
+    region: "Global"
+    weight: 0.8
+    section_hint: "ma"
+
+  - name: "Bloomberg Markets"
+    url: "https://feeds.bloomberg.com/markets/news.rss"
+    region: "Global"
+    weight: 0.7
+    section_hint: "macro"
+
+  - name: "Bloomberg Deals"
+    url: "https://feeds.bloomberg.com/bbiz/sitemap_news.xml"
+    region: "Global"
+    weight: 0.9
+    section_hint: "ma"
+
+  - name: "WSJ Business"
+    url: "https://feeds.a.dj.com/rss/RSSWSJD.xml"
+    region: "Global"
+    weight: 0.7
+    section_hint: "macro"
+
+  - name: "WSJ Markets"
+    url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+    region: "Global"
+    weight: 0.7
+    section_hint: "macro"
+
+## --------------------------------------------------------------------------
+## VIETNAMESE — local business / deal coverage (will be translated)
+## --------------------------------------------------------------------------
+
+  - name: "VnExpress Kinh Doanh"
+    url: "https://vnexpress.net/rss/kinh-doanh.rss"
+    region: "VN"
+    weight: 0.9
+    language: "vi"
+    section_hint: "sector"
+
+  - name: "CafeF Doanh nghiệp"
+    url: "https://cafef.vn/doanh-nghiep.rss"
+    region: "VN"
+    weight: 1.0
+    language: "vi"
+    section_hint: "ma"
+
+  - name: "CafeF Tài chính"
+    url: "https://cafef.vn/tai-chinh-ngan-hang.rss"
+    region: "VN"
+    weight: 0.8
+    language: "vi"
+    section_hint: "sector"
+
+  - name: "CafeF Bất động sản"
+    url: "https://cafef.vn/bat-dong-san.rss"
+    region: "VN"
+    weight: 0.7
+    language: "vi"
+    section_hint: "sector"
+
+  - name: "VietnamBiz"
+    url: "https://vietnambiz.vn/feed"
+    region: "VN"
+    weight: 0.8
+    language: "vi"
+    section_hint: "sector"
+
+  - name: "Vietnam Investment Review (VIR)"
+    url: "https://vir.com.vn/rss/home.rss"
+    region: "VN"
+    weight: 1.0
+    language: "en"
+    section_hint: "ma"
+
+  - name: "The Investor (Nhà Đầu Tư EN)"
+    url: "https://theinvestor.vn/rss/home.rss"
+    region: "VN"
+    weight: 1.0
+    language: "en"
+    section_hint: "ma"
+
+  - name: "Brands Vietnam"
+    url: "https://www.brandsvietnam.com/rss"
+    region: "VN"
+    weight: 0.7
+    language: "vi"
+    section_hint: "sector"
+
+  - name: "Saigon Times"
+    url: "https://english.thesaigontimes.vn/feed/"
+    region: "VN"
+    weight: 0.6
+    language: "en"
+    section_hint: "macro"
+
+## --------------------------------------------------------------------------
+## SECTOR TRADES — niche but high-signal
+## --------------------------------------------------------------------------
+
+  - name: "FiercePharma"
+    url: "https://www.fiercepharma.com/rss/xml"
+    region: "Global"
+    weight: 0.8
+    section_hint: "sector"
+    sector: "healthcare"
+
+  - name: "Endpoints News"
+    url: "https://endpts.com/feed/"
+    region: "Global"
+    weight: 0.7
+    section_hint: "sector"
+    sector: "healthcare"
+
+  - name: "Mining.com"
+    url: "https://www.mining.com/feed/"
+    region: "Global"
+    weight: 0.6
+    section_hint: "sector"
+    sector: "industrials"
+
+  - name: "The Loadstar"
+    url: "https://theloadstar.com/feed/"
+    region: "Global"
+    weight: 0.7
+    section_hint: "sector"
+    sector: "logistics"
+
+  - name: "Packaging Europe"
+    url: "https://packagingeurope.com/rss"
+    region: "Global"
+    weight: 0.5
+    section_hint: "sector"
+    sector: "industrials"
+
+  - name: "Just Drinks"
+    url: "https://www.just-drinks.com/feed/"
+    region: "Global"
+    weight: 0.6
+    section_hint: "sector"
+    sector: "consumer"
+
+  - name: "Just Food"
+    url: "https://www.just-food.com/feed/"
+    region: "Global"
+    weight: 0.6
+    section_hint: "sector"
+    sector: "consumer"
+
+## --------------------------------------------------------------------------
+## GOOGLE NEWS QUERIES — used as supplemental ingest for fresh signal
+## Each query becomes its own RSS feed via news.google.com/rss/search
+## --------------------------------------------------------------------------
+google_news_queries:
+
+  ## M&A Desk feeders
+  - query: "Vietnam M&A acquisition"
+    section_hint: "ma"
+    weight: 1.0
+  - query: "Vietnam private equity investment"
+    section_hint: "ma"
+    weight: 0.9
+  - query: "Southeast Asia buyout"
+    section_hint: "ma"
+    weight: 0.9
+  - query: "Vietnam acquisition pharma OR healthcare"
+    section_hint: "ma"
+    weight: 1.0
+  - query: "Vietnam acquisition consumer OR FMCG OR retail"
+    section_hint: "ma"
+    weight: 1.0
+
+  ## Investor Watch feeders
+  - query: '"Quadria Capital" OR "Novo Holdings"'
+    section_hint: "investor"
+    weight: 1.0
+  - query: '"TPG Capital" OR "Carlyle" Asia investment'
+    section_hint: "investor"
+    weight: 0.9
+  - query: '"Warburg Pincus" OR "Bain Capital" Asia'
+    section_hint: "investor"
+    weight: 0.9
+  - query: '"KKR" OR "CVC" Southeast Asia'
+    section_hint: "investor"
+    weight: 0.8
+  - query: '"Mekong Capital" OR "VinaCapital" OR "Dragon Capital"'
+    section_hint: "investor"
+    weight: 0.8
+
+  ## Regulatory Vietnam feeders
+  - query: "Vietnam regulation FDI sector incentive"
+    section_hint: "regulatory"
+    weight: 0.9
+  - query: "Vietnam Ministry of Finance OR Ministry of Planning announcement"
+    section_hint: "regulatory"
+    weight: 0.7
+
+  ## Sector Pulse feeders
+  - query: "Vietnam consumer spending retail trends"
+    section_hint: "sector"
+    weight: 0.8
+  - query: "Vietnam logistics cold chain port"
+    section_hint: "sector"
+    weight: 0.7
+  - query: "Vietnam hospital clinic chain"
+    section_hint: "sector"
+    weight: 0.8
+
+  ## Reports surfacing
+  - query: "Bain OR McKinsey OR EY OR BCG Vietnam report 2026"
+    section_hint: "reports"
+    weight: 1.0
+  - query: "Southeast Asia private equity report"
+    section_hint: "reports"
+    weight: 0.9

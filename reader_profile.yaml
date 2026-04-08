@@ -1,0 +1,137 @@
+## Koru Brief — Reader Profile
+## This is the "secret sauce" file. Everything downstream (relevance scoring,
+## blurb tone, the questions appended to each story) is controlled from here.
+## Edit freely — the brief regenerates on the next scheduled run.
+
+reader:
+  handle: "Phuong Anh"           # change to a handle if you want anonymity
+  role: >
+    Senior investment analyst at a Vietnamese boutique merchant banking
+    advisory firm. We both advise on M&A and invest from our own balance
+    sheet. Strong on finance theory; building real-world commercial
+    intuition for how industries actually run.
+
+learning_goals:
+  - "How deals are actually structured (earn-outs, vendor financing,
+     management roll-overs, MBO mechanics, anti-dilution, ratchet terms)"
+  - "Why a buyer pays a specific multiple — strategic premium logic,
+     synergy math, control premia, illiquidity discounts"
+  - "Industry unit economics that finance class never teaches —
+     e.g. logistics-bound businesses (rock, paper, cement) selling
+     only where they produce; cold-chain margins; FMCG distribution
+     stack take-rates"
+  - "How regulatory shifts in Vietnam reshape competitive moats and
+     redirect capital flows by sector"
+  - "Sector segmentation, representative business models, and the
+     real KPI a sector operator actually obsesses over"
+
+sectors:
+  # Ordered by your interest. The scorer uses these weights (1.0 highest).
+  - { name: "Consumer & Retail (FMCG, retail chains, F&B)", weight: 1.0 }
+  - { name: "Healthcare (pharma, biotech, hospitals, clinics)", weight: 1.0 }
+  - { name: "B2B manufacturing & industrials", weight: 0.9 }
+  - { name: "Hard assets (infra, energy, hospitals real estate, logistics RE)", weight: 0.9 }
+  - { name: "Financial services (banks, insurance, fintech, NBFC)", weight: 0.8 }
+  - { name: "Supply chain & logistics (3PL, cold chain, ports, last mile)", weight: 0.9 }
+  # Explicit ignores — items only in these sectors get filtered out
+  ignore:
+    - "Pure crypto / Web3 / NFT"
+    - "Consumer SaaS unicorn fundraising hype"
+    - "Gaming round announcements without operating substance"
+
+geographies:
+  - { name: "Vietnam", weight: 1.0 }
+  - { name: "Southeast Asia (SG, ID, TH, MY, PH)", weight: 0.9 }
+  - { name: "China", weight: 0.7 }       # cascades into VN often
+  - { name: "India", weight: 0.6 }       # adjacent comp, healthcare especially
+  - { name: "United States", weight: 0.4 } # only when it matters for SEA
+
+deal_lens:
+  type: "M&A primary, fundraising secondary"
+  min_deal_size_usd: 10_000_000
+  show_above_band: true   # learning fodder from $100mn+ deals
+  show_below_band: false  # filter out small rounds unless investor is on watchlist
+  always_show_if:
+    - "Investor is on watchlist (see below)"
+    - "Vietnam target regardless of size if M&A"
+    - "Cross-border SEA M&A regardless of size"
+
+investor_watchlist:
+  # People/funds whose moves you want to never miss
+  funds:
+    - "Quadria Capital"
+    - "Novo Holdings"
+    - "Novo Nordisk Foundation"
+    - "TPG (Capital, Growth, Rise)"
+    - "Carlyle Group"
+    - "Warburg Pincus"
+    - "Bain Capital"
+    - "CVC Capital Partners"
+    - "KKR"
+    - "Navis Capital"
+    - "Creador"
+    - "Affinity Equity Partners"
+    - "Baring Private Equity Asia / EQT Asia"
+    - "Mekong Capital"
+    - "VinaCapital"
+    - "Dragon Capital"
+    - "SSI Asset Management"
+  thesis_archetypes:
+    - "Financial-strategic hybrids (Novo, Quadria) — deep sector PE"
+    - "Regional platform builders (TPG, Carlyle, Warburg) — buy-and-build"
+    - "VN local PE & family-office co-invests"
+
+frameworks_preference:
+  # Used by synthesis layer when generating "think deeper" questions.
+  # The synthesizer should bias HEAVILY toward second-order thinking —
+  # the reader specifically wants more questions in this style.
+  1: "Second-order thinking — what does this make true 12-24 months out? Who reacts next, and how? What does this force OTHER players to do?"
+  2: "Reverse engineering — work backward from observed price/structure to assumptions"
+  3: "Porter's Five Forces — when sector dynamics are at play"
+  4: "Cohort economics & unit economics — when it's a consumer/sub story"
+  5: "Jobs-to-be-done — when it's a positioning/M&A rationale story"
+
+frameworks_target_mix:
+  # Out of every 10 questions generated, aim for roughly this distribution.
+  second_order: 5
+  reverse_engineering: 3
+  porter_or_unit_econ: 2
+
+question_style:
+  on_deal_news:
+    - "mechanics: Why this structure? What signals would tell us the buyer overpaid/underpaid?"
+    - "thesis: What has to be true for this deal to clear hurdle rate in 5 years?"
+  on_business_news:
+    - "unit economics: What does this imply per unit/customer/transaction?"
+    - "competitive: Who in this sector should be most/least worried, and why?"
+  on_regulatory_news:
+    - "implication: Which player archetype gains the most? Loses the most?"
+    - "second-order: What investor reaction does this trigger 6-12 months out?"
+  on_macro_news:
+    - "Skip pure ticks. Only include if an editorial connects it to sector/spend behavior."
+
+tone:
+  voice: "sharp analyst, like a teacher building a case"
+  format_per_item: >
+    3-5 sentence blurb. Facts first, then 'so what'. End with one
+    inline question. No hedging language. No 'it remains to be seen'.
+  banned_phrases:
+    - "It remains to be seen"
+    - "Time will tell"
+    - "Industry experts say"
+    - "Sources familiar with the matter" # the source link already implies this
+
+reflection:
+  daily_synthesis_question: true   # one batched question at the end of the brief
+  ties_two_or_more_stories: true   # forces you to connect the dots
+
+filters:
+  always_drop:
+    - "Pure stock price ticks (X up/down Y%) without analysis"
+    - "Vanity awards / 'company of the year' announcements"
+    - "Generic political headlines unless directly tied to business/sector"
+    - "Reposts of the same wire story by 5 outlets — keep one"
+  always_keep:
+    - "Free PE/IB sector reports (Bain, McKinsey, EY, GT, KPMG, BCG)"
+    - "VN regulatory gazette items affecting listed sectors"
+    - "Anything from a watchlist investor"

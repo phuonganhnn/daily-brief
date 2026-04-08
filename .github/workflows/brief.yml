@@ -1,0 +1,64 @@
+name: Generate Koru Brief
+
+on:
+  schedule:
+    # 4x daily Vietnam time (ICT = UTC+7)
+    # 06:00 ICT = 23:00 UTC (prev day)
+    # 12:00 ICT = 05:00 UTC
+    # 18:00 ICT = 11:00 UTC
+    # 23:00 ICT = 16:00 UTC
+    - cron: '0 23 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 11 * * *'
+    - cron: '0 16 * * *'
+  workflow_dispatch:  # also allow manual trigger
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python main.py
+
+      - name: Commit cache
+        run: |
+          git config user.name "koru-brief-bot"
+          git config user.email "bot@koru-brief.local"
+          git add cache/ docs/
+          git diff --staged --quiet || git commit -m "brief: $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
